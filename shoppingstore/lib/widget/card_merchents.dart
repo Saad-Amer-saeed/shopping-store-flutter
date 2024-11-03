@@ -1,8 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:shoppingstore/model/store_merchants.dart';
 
 class CardMerchents extends StatelessWidget {
-  const CardMerchents({super.key});
-
+  const CardMerchents({super.key, required this.store});
+  final Store store;
   @override
   Widget build(BuildContext context) {
     return Card(
@@ -27,7 +28,7 @@ class CardMerchents extends StatelessWidget {
                   borderRadius:
                       BorderRadius.circular(8.0), // Match border radius
                   child: Image.network(
-                    'https://d2yugwrr6or5n1.cloudfront.net/uploads/1540686707.jpg',
+                    store.storeLogo,
                     width: 100, // Adjust width as needed
                     height: 100, // Adjust height as needed
                     fit: BoxFit.cover,
@@ -40,8 +41,8 @@ class CardMerchents extends StatelessWidget {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 mainAxisSize: MainAxisSize.min,
                 children: [
-                  const Text(
-                    'Roll Kebab',
+                  Text(
+                    store.storeName,
                     style: TextStyle(
                       fontSize: 17,
                       fontWeight: FontWeight.bold,
@@ -49,40 +50,44 @@ class CardMerchents extends StatelessWidget {
                   ),
                   const SizedBox(height: 7),
                   // Discount text
-                  Container(
-                    padding: const EdgeInsets.symmetric(
-                        horizontal: 6.0, vertical: 3.0),
-                    decoration: BoxDecoration(
-                      color: const Color(
-                          0xFFDE3163), // Background color for discount text
-                      borderRadius:
-                          BorderRadius.circular(5.0), // Rounded corners
-                    ),
-                    child: const Text(
-                      '15% off select item',
-                      style: TextStyle(
-                        color: Colors.white,
-                        fontSize: 12,
-                      ),
-                    ),
-                  ),
+                  store.discountPercentage > 0
+                      ? Container(
+                          padding: const EdgeInsets.symmetric(
+                              horizontal: 6.0, vertical: 3.0),
+                          decoration: BoxDecoration(
+                            color: const Color(
+                                0xFFDE3163), // Background color for discount text
+                            borderRadius:
+                                BorderRadius.circular(5.0), // Rounded corners
+                          ),
+                          child: Text(
+                            '${store.discountPercentage} % off select item',
+                            style: TextStyle(
+                              color: Colors.white,
+                              fontSize: 12,
+                            ),
+                          ),
+                        )
+                      : SizedBox
+                          .shrink(), // Empty widget if discountPercentage is 0
+
                   const SizedBox(height: 7),
                   // Rating
-                  const Row(
+                  Row(
                     children: [
                       Icon(
                         Icons.star,
                         color: Color(0xFFFFE234),
                       ),
                       Text(
-                        ' 3.0',
+                        store.storeRate.toString(),
                         style: TextStyle(fontSize: 18),
                       ), // Space added for readability
                     ],
                   ),
                   const SizedBox(height: 7),
                   // Time and price
-                  const Row(
+                  Row(
                     children: [
                       Icon(
                         Icons.timer,
@@ -96,7 +101,13 @@ class CardMerchents extends StatelessWidget {
                         size: 20,
                       ),
                       SizedBox(width: 5),
-                      Text('2000 IQD'),
+                      store.storeDeliveryPrice > 0
+                          ? Text(
+                              '${store.storeDeliveryPrice.toStringAsFixed(0)} IQD')
+                          : Text(
+                              'Free Delivry',
+                              style: TextStyle(color: Colors.red),
+                            ),
                     ],
                   ),
                 ],
