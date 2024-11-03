@@ -4,6 +4,7 @@ import 'package:shoppingstore/model/store_merchants.dart';
 class CardMerchents extends StatelessWidget {
   const CardMerchents({super.key, required this.store});
   final Store store;
+
   @override
   Widget build(BuildContext context) {
     return Card(
@@ -15,27 +16,57 @@ class CardMerchents extends StatelessWidget {
               horizontal: 16.0, vertical: 8.0), // Padding inside the card
           child: Row(
             children: [
-              // Image with border
-              Container(
-                decoration: BoxDecoration(
-                  border: Border.all(
-                    color: Colors.grey, // Border color
-                    width: 2.0, // Border width
+              // Stack for the image and overlay
+              Stack(
+                children: [
+                  // Image with border
+                  Container(
+                    decoration: BoxDecoration(
+                      border: Border.all(
+                        color: Colors.grey, // Border color
+                        width: 2.0, // Border width
+                      ),
+                      borderRadius:
+                          BorderRadius.circular(8.0), // Rounded corners
+                    ),
+                    child: ClipRRect(
+                      borderRadius:
+                          BorderRadius.circular(8.0), // Match border radius
+                      child: Image.network(
+                        store.storeLogo,
+                        width: 100, // Adjust width as needed
+                        height: 100, // Adjust height as needed
+                        fit: BoxFit.cover,
+                      ),
+                    ),
                   ),
-                  borderRadius: BorderRadius.circular(8.0), // Rounded corners
-                ),
-                child: ClipRRect(
-                  borderRadius:
-                      BorderRadius.circular(8.0), // Match border radius
-                  child: Image.network(
-                    store.storeLogo,
-                    width: 100, // Adjust width as needed
-                    height: 100, // Adjust height as needed
-                    fit: BoxFit.cover,
-                  ),
-                ),
+
+                  // Overlay for "Open" text
+                  if (!store.isStoreOpen) // Check if the store is open
+                    Container(
+                      width: 105, // Match image width
+                      height: 105, // Match image height
+                      decoration: BoxDecoration(
+                        color: Colors.black.withOpacity(0.5),
+                        // Semi-transparent background
+                        borderRadius:
+                            BorderRadius.circular(8.0), // Match border radius
+                      ),
+                      alignment: Alignment.center, // Center the text
+                      child: const Text(
+                        'Close',
+                        style: TextStyle(
+                          color: Colors.white,
+                          fontWeight: FontWeight.bold,
+                          fontSize: 16, // Adjust font size as needed
+                        ),
+                      ),
+                    ),
+                ],
               ),
+
               const SizedBox(width: 20), // Space between image and text
+
               // Text column
               Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
@@ -43,7 +74,7 @@ class CardMerchents extends StatelessWidget {
                 children: [
                   Text(
                     store.storeName,
-                    style: TextStyle(
+                    style: const TextStyle(
                       fontSize: 17,
                       fontWeight: FontWeight.bold,
                     ),
@@ -62,26 +93,26 @@ class CardMerchents extends StatelessWidget {
                           ),
                           child: Text(
                             '${store.discountPercentage} % off select item',
-                            style: TextStyle(
+                            style: const TextStyle(
                               color: Colors.white,
                               fontSize: 12,
                             ),
                           ),
                         )
-                      : SizedBox
+                      : const SizedBox
                           .shrink(), // Empty widget if discountPercentage is 0
 
                   const SizedBox(height: 7),
                   // Rating
                   Row(
                     children: [
-                      Icon(
+                      const Icon(
                         Icons.star,
                         color: Color(0xFFFFE234),
                       ),
                       Text(
                         store.storeRate.toString(),
-                        style: TextStyle(fontSize: 18),
+                        style: const TextStyle(fontSize: 18),
                       ), // Space added for readability
                     ],
                   ),
@@ -89,23 +120,23 @@ class CardMerchents extends StatelessWidget {
                   // Time and price
                   Row(
                     children: [
-                      Icon(
+                      const Icon(
                         Icons.timer,
                         size: 20,
                       ),
-                      SizedBox(width: 5),
-                      Text('21 mins'),
-                      SizedBox(width: 5),
-                      Icon(
+                      const SizedBox(width: 5),
+                      const Text('21 mins'),
+                      const SizedBox(width: 5),
+                      const Icon(
                         Icons.time_to_leave,
                         size: 20,
                       ),
-                      SizedBox(width: 5),
+                      const SizedBox(width: 5),
                       store.storeDeliveryPrice > 0
                           ? Text(
                               '${store.storeDeliveryPrice.toStringAsFixed(0)} IQD')
-                          : Text(
-                              'Free Delivry',
+                          : const Text(
+                              'Free Delivery',
                               style: TextStyle(color: Colors.red),
                             ),
                     ],

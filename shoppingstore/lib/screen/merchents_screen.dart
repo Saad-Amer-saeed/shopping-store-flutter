@@ -27,19 +27,23 @@ class _MerchentsScreenState extends State<MerchentsScreen> {
       home: Scaffold(
         body: Center(
           child: Container(
-            margin: const EdgeInsets.symmetric(horizontal: 5.0),
+            margin: const EdgeInsets.only(top: 40.0),
             child: Column(
               children: [
+                const Text('Additional text below the ListView',
+                    style: TextStyle(fontSize: 18)),
+                const SizedBox(height: 20),
                 Expanded(
                   child: FutureBuilder<List<Store>>(
                     future: futureStores,
                     builder: (context, snapshot) {
                       if (snapshot.connectionState == ConnectionState.waiting) {
-                        return Center(child: CircularProgressIndicator());
+                        return const Center(child: CircularProgressIndicator());
                       } else if (snapshot.hasError) {
                         return Center(child: Text('Error: ${snapshot.error}'));
                       } else if (!snapshot.hasData || snapshot.data!.isEmpty) {
-                        return Center(child: Text('No stores available.'));
+                        return const Center(
+                            child: Text('No stores available.'));
                       }
                       final stores = snapshot.data!;
                       return ListView.builder(
@@ -47,17 +51,13 @@ class _MerchentsScreenState extends State<MerchentsScreen> {
                         itemBuilder: (context, index) {
                           return Container(
                             margin: const EdgeInsets.symmetric(vertical: 8.0),
-                            child: CardMerchents(
-                                store: stores[index]), // Pass the store data
+                            child: CardMerchents(store: stores[index]),
                           );
                         },
                       );
                     },
                   ),
                 ),
-                SizedBox(height: 20),
-                Text('Additional text below the ListView',
-                    style: TextStyle(fontSize: 18)),
               ],
             ),
           ),
@@ -66,18 +66,3 @@ class _MerchentsScreenState extends State<MerchentsScreen> {
     );
   }
 }
-
-
-
-//  return MaterialApp(
-//       home: Scaffold(
-//         body: ListView.builder(
-//           itemCount: merchants.length,
-//           itemBuilder: (context, index) {
-//             return Container(
-//               margin: const EdgeInsets.symmetric(vertical: 8.0), // Space between cards
-//               child: CardMerchents(merchant: merchants[index]),
-//             );
-//           },
-//         ),
-//       ),
