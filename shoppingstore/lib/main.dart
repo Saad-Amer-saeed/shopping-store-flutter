@@ -10,9 +10,14 @@ class App extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return const MaterialApp(
-        home: Scaffold(
-      body: MerchentsScreen(),
-    ));
+    return MaterialApp(
+      theme: ThemeData(
+        scaffoldBackgroundColor:
+            Colors.white, // Set the default background color to white
+      ),
+      home: const Scaffold(
+        body: MerchentsScreen(),
+      ),
+    );
   }
 }
