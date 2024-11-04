@@ -316,6 +316,22 @@ class _MerchentsScreenState extends State<MerchentsScreen> {
     });
   }
 
+  void _sortingMerchents(String? selectOptions) {
+    setState(() {
+      if (selectOptions == 'HighestRating') {
+        // Sort by highest rating
+        allStores.sort((a, b) => b.storeRate.compareTo(a.storeRate));
+      } else if (selectOptions == 'AtoZ') {
+        // Sort by store name A to Z
+        allStores.sort((a, b) => a.storeName.compareTo(b.storeName));
+      } else if (selectOptions == 'New') {
+        // Sort by store name A to Z
+        allStores.sort(
+            (a, b) => b.storeDateActivated.compareTo(a.storeDateActivated));
+      }
+    });
+  }
+
   void _searchfillter(String enteredKeyword) {
     fillter = baseStores.isEmpty ? allStores : baseStores;
 
@@ -373,7 +389,7 @@ class _MerchentsScreenState extends State<MerchentsScreen> {
               color: Colors.white,
               child: Column(
                 children: [
-                  Align(
+                  const Align(
                     alignment:
                         Alignment.centerLeft, // Aligns the text to the left
                     child: Text(
@@ -384,37 +400,9 @@ class _MerchentsScreenState extends State<MerchentsScreen> {
                       ),
                     ),
                   ),
-                  SizedBox(
+                  const SizedBox(
                     height: 12,
                   ),
-                  ListTile(
-                    title: Text('Closest'),
-                    trailing: Radio<String>(
-                      // Changed to trailing
-                      value: 'Closest',
-                      groupValue: selectedOption,
-                      onChanged: (String? value) {
-                        setState(() {
-                          selectedOption = value;
-                        });
-                      },
-                    ),
-                  ),
-                  Divider(),
-                  ListTile(
-                    title: Text('Highest Rating'),
-                    trailing: Radio<String>(
-                      // Changed to trailing
-                      value: 'Highest Rating',
-                      groupValue: selectedOption,
-                      onChanged: (String? value) {
-                        setState(() {
-                          selectedOption = value;
-                        });
-                      },
-                    ),
-                  ),
-                  Divider(),
                   ListTile(
                     title: Text('New'),
                     trailing: Radio<String>(
@@ -424,11 +412,43 @@ class _MerchentsScreenState extends State<MerchentsScreen> {
                       onChanged: (String? value) {
                         setState(() {
                           selectedOption = value;
+                          _sortingMerchents(selectedOption);
                         });
                       },
                     ),
                   ),
-                  Divider(),
+                  const Divider(),
+                  ListTile(
+                    title: Text('Highest Rating'),
+                    trailing: Radio<String>(
+                      // Changed to trailing
+                      value: 'HighestRating',
+                      groupValue: selectedOption,
+                      onChanged: (String? value) {
+                        setState(() {
+                          selectedOption = value;
+                          _sortingMerchents(selectedOption);
+                        });
+                      },
+                    ),
+                  ),
+                  const Divider(),
+                  ListTile(
+                    title: Text('A TO Z'),
+                    trailing: Radio<String>(
+                      // Changed to trailing
+                      value: 'AtoZ',
+                      groupValue: selectedOption,
+                      onChanged: (String? value) {
+                        setState(() {
+                          selectedOption = value;
+                          _sortingMerchents(selectedOption);
+                        });
+                      },
+                    ),
+                  ),
+                  const Divider(),
+
                   // SizedBox(height: 20),
                   // Text('Selected Option: $selectedOption'),
                 ],
@@ -442,7 +462,6 @@ class _MerchentsScreenState extends State<MerchentsScreen> {
 
   @override
   Widget build(BuildContext context) {
-    print(selectedOption);
     return MaterialApp(
       home: Center(
         child: Container(
