@@ -16,6 +16,8 @@ class _MerchentsScreenState extends State<MerchentsScreen> {
   late Future<List<Store>> futureStores;
   List<Store> allStores = []; // To hold all the stores
   List<Store> filteredStores = []; // To hold filtered stores
+  List<Store> baseStores = []; // To hold filtered stores
+  List<Store> fillter = []; // To hold filtered stores
 
   @override
   void initState() {
@@ -29,65 +31,13 @@ class _MerchentsScreenState extends State<MerchentsScreen> {
     });
   }
 
-  // void _runFilter(String enteredKeyword,
-  //     {bool rateFilter = false, bool freeFilter = false, disaccount = false}) {
-  //   if (enteredKeyword.isEmpty && !rateFilter && !freeFilter && !disaccount) {
-  //     // If the search field is empty and no rate filter, show all stores
-  //     setState(() {
-  //       filteredStores = allStores;
-  //     });
-  //   } else {
-  //     setState(() {
-  //       filteredStores = allStores.where((store) {
-  //         final matchesKeyword = store.storeName
-  //             .toLowerCase()
-  //             .contains(enteredKeyword.toLowerCase());
-  //         final matchesRating = rateFilter
-  //             ? store.storeRate > 4
-  //             : true; // Assume store.rating exists
-  //         final matchesfree = freeFilter
-  //             ? store.storeDeliveryPrice < 1
-  //             : true; // Assume store.rating exists
-  //         final disaccountfree = disaccount
-  //             ? store.discountPercentage > 0
-  //             : true; // Assume store.rating exists
+  void _runFilterrr(
+    String enteredKeyword,
+  ) {
+    fillter = baseStores.isEmpty ? allStores : baseStores;
 
-  //         return matchesKeyword &&
-  //             matchesRating &&
-  //             matchesfree &&
-  //             disaccountfree;
-  //       }).toList();
-  //     });
-  //   }
-  // }
-
-  void _runFilter(String enteredKeyword,
-      {bool rateFilter = false,
-      bool freeFilter = false,
-      bool disaccount = false}) {
     setState(() {
-      // Start with all stores
-      // List<Store> baseStores = allStores;
-      List<Store> baseStores = allStores;
-      // If the rating filter is applied, filter by rating first
-      if (rateFilter) {
-        baseStores = baseStores.where((store) => store.storeRate > 4).toList();
-      }
-
-      // If the free delivery filter is applied, filter by delivery price next
-      if (freeFilter) {
-        baseStores =
-            baseStores.where((store) => store.storeDeliveryPrice < 1).toList();
-      }
-
-      // If the discount filter is applied, filter by discount percentage next
-      if (disaccount) {
-        baseStores =
-            baseStores.where((store) => store.discountPercentage > 0).toList();
-      }
-
-      // Now apply the keyword filter on the filtered baseStores
-      filteredStores = baseStores.where((store) {
+      filteredStores = fillter.where((store) {
         final matchesKeyword = enteredKeyword.isEmpty ||
             store.storeName
                 .toLowerCase()
@@ -99,9 +49,45 @@ class _MerchentsScreenState extends State<MerchentsScreen> {
     });
   }
 
+  void _runFilter({
+    bool rateFilter = false,
+    bool freeFilter = false,
+    bool discountFilter = false,
+    bool reset = false,
+  }) {
+    setState(() {
+      baseStores = allStores;
+
+      // Apply rating filter
+      if (rateFilter) {
+        baseStores = baseStores.where((store) => store.storeRate > 4).toList();
+      }
+
+      // Apply free delivery filter
+      if (freeFilter) {
+        baseStores =
+            baseStores.where((store) => store.storeDeliveryPrice < 1).toList();
+      }
+
+      // Apply discount filter
+      if (discountFilter) {
+        baseStores =
+            baseStores.where((store) => store.discountPercentage > 0).toList();
+      }
+
+      // ignore: curly_braces_in_flow_control_structures
+      else
+        (reset) {
+          baseStores = allStores;
+        };
+
+      // Update filteredStores based on keyword + selected filters
+      filteredStores = baseStores;
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
-    print(filteredStores);
     return MaterialApp(
       home: Scaffold(
         body: Center(
@@ -110,30 +96,44 @@ class _MerchentsScreenState extends State<MerchentsScreen> {
             child: Column(
               children: [
                 TextField(
-                  onChanged: (value) => _runFilter(value),
+                  onChanged: (value) => _runFilterrr(value),
                   decoration: const InputDecoration(
                       labelText: 'Search', suffixIcon: Icon(Icons.search)),
                 ),
-                ElevatedButton(
-                  onPressed: () {
-                    _runFilter('',
-                        rateFilter: true); // Filter for stores with rating > 4
-                  },
-                  child: Text('Rate'),
-                ),
-                ElevatedButton(
-                  onPressed: () {
-                    _runFilter('',
-                        freeFilter: true); // Filter for stores with rating > 4
-                  },
-                  child: Text('Free'),
-                ),
-                ElevatedButton(
-                  onPressed: () {
-                    _runFilter('',
-                        disaccount: true); // Filter for stores with rating > 4
-                  },
-                  child: Text('Disaccount'),
+                Row(
+                  children: [
+                    ElevatedButton(
+                      onPressed: () {
+                        _runFilter(
+                            rateFilter:
+                                true); // Filter for stores with rating > 4
+                      },
+                      child: Text('Rate'),
+                    ),
+                    ElevatedButton(
+                      onPressed: () {
+                        _runFilter(
+                            freeFilter:
+                                true); // Filter for stores with rating > 4
+                      },
+                      child: Text('Free'),
+                    ),
+                    ElevatedButton(
+                      onPressed: () {
+                        _runFilter(
+                            discountFilter:
+                                true); // Filter for stores with rating > 4
+                      },
+                      child: Text('Disaccount'),
+                    ),
+                    ElevatedButton(
+                      onPressed: () {
+                        _runFilter(
+                            reset: true); // Filter for stores with rating > 4
+                      },
+                      child: Text('Reset'),
+                    ),
+                  ],
                 ),
                 const SizedBox(height: 30),
                 Expanded(
