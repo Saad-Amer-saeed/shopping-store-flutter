@@ -4,6 +4,7 @@ import 'package:shoppingstore/model/store_merchants.dart';
 import 'package:shoppingstore/data/json_converter.dart';
 import 'package:shoppingstore/widget/filter_button .dart';
 import 'package:shoppingstore/widget/sort_options_dialog.dart';
+import 'package:shoppingstore/screen/store_item_screen.dart';
 
 class MerchentsScreen extends StatefulWidget {
   const MerchentsScreen({super.key});
@@ -121,6 +122,15 @@ class _MerchentsScreenState extends State<MerchentsScreen> {
     );
   }
 
+  void _selectedStore(int storeId) {
+    Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (context) => StoreItemScreen(),
+      ),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
@@ -184,7 +194,10 @@ class _MerchentsScreenState extends State<MerchentsScreen> {
                       itemBuilder: (context, index) {
                         return Container(
                           margin: const EdgeInsets.symmetric(vertical: 8.0),
-                          child: CardMerchents(store: stores[index]),
+                          child: CardMerchents(
+                            store: stores[index],
+                            onTap: (storeId) => _selectedStore(storeId),
+                          ),
                         );
                       },
                     );
