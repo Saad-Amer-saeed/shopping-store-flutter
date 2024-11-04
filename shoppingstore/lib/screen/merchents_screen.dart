@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:shoppingstore/widget/card_merchents.dart';
 import 'package:shoppingstore/model/store_merchants.dart';
 import 'package:shoppingstore/data/json_converter.dart';
+import 'package:shoppingstore/widget/filter_button .dart';
 
 class MerchentsScreen extends StatefulWidget {
   const MerchentsScreen({super.key});
@@ -31,7 +32,7 @@ class _MerchentsScreenState extends State<MerchentsScreen> {
     });
   }
 
-  void _runFilterrr(
+  void _searchfillter(
     String enteredKeyword,
   ) {
     fillter = baseStores.isEmpty ? allStores : baseStores;
@@ -43,7 +44,6 @@ class _MerchentsScreenState extends State<MerchentsScreen> {
                 .toLowerCase()
                 .contains(enteredKeyword.toLowerCase());
 
-        // Return true if the keyword matches, as other filters have already been applied
         return matchesKeyword;
       }).toList();
     });
@@ -56,32 +56,34 @@ class _MerchentsScreenState extends State<MerchentsScreen> {
     bool reset = false,
   }) {
     setState(() {
-      baseStores = allStores;
+      // If reset is true, set baseStores back to allStores and skip other filters
+      if (reset) {
+        baseStores = allStores;
+      } else {
+        baseStores = allStores;
 
-      // Apply rating filter
-      if (rateFilter) {
-        baseStores = baseStores.where((store) => store.storeRate > 4).toList();
+        // Apply rating filter
+        if (rateFilter) {
+          baseStores =
+              baseStores.where((store) => store.storeRate > 4).toList();
+        }
+
+        // Apply free delivery filter
+        if (freeFilter) {
+          baseStores = baseStores
+              .where((store) => store.storeDeliveryPrice < 1)
+              .toList();
+        }
+
+        // Apply discount filter
+        if (discountFilter) {
+          baseStores = baseStores
+              .where((store) => store.discountPercentage > 0)
+              .toList();
+        }
       }
 
-      // Apply free delivery filter
-      if (freeFilter) {
-        baseStores =
-            baseStores.where((store) => store.storeDeliveryPrice < 1).toList();
-      }
-
-      // Apply discount filter
-      if (discountFilter) {
-        baseStores =
-            baseStores.where((store) => store.discountPercentage > 0).toList();
-      }
-
-      // ignore: curly_braces_in_flow_control_structures
-      else
-        (reset) {
-          baseStores = allStores;
-        };
-
-      // Update filteredStores based on keyword + selected filters
+      // Update filteredStores based on the selected filters
       filteredStores = baseStores;
     });
   }
@@ -96,46 +98,43 @@ class _MerchentsScreenState extends State<MerchentsScreen> {
             child: Column(
               children: [
                 TextField(
-                  onChanged: (value) => _runFilterrr(value),
+                  onChanged: (value) => _searchfillter(value),
                   decoration: const InputDecoration(
                       labelText: 'Search', suffixIcon: Icon(Icons.search)),
                 ),
-                Row(
-                  children: [
-                    ElevatedButton(
-                      onPressed: () {
-                        _runFilter(
-                            rateFilter:
-                                true); // Filter for stores with rating > 4
-                      },
-                      child: Text('Rate'),
-                    ),
-                    ElevatedButton(
-                      onPressed: () {
-                        _runFilter(
-                            freeFilter:
-                                true); // Filter for stores with rating > 4
-                      },
-                      child: Text('Free'),
-                    ),
-                    ElevatedButton(
-                      onPressed: () {
-                        _runFilter(
-                            discountFilter:
-                                true); // Filter for stores with rating > 4
-                      },
-                      child: Text('Disaccount'),
-                    ),
-                    ElevatedButton(
-                      onPressed: () {
-                        _runFilter(
-                            reset: true); // Filter for stores with rating > 4
-                      },
-                      child: Text('Reset'),
-                    ),
-                  ],
+                const SizedBox(height: 20),
+                SingleChildScrollView(
+                  scrollDirection: Axis.horizontal,
+                  child: Row(
+                    children: [
+                      FilterButton(
+                        label: "Sort",
+                        onPressed: () => _runFilter(rateFilter: true),
+                      ),
+                      const SizedBox(width: 10),
+                      FilterButton(
+                        label: "Rate",
+                        onPressed: () => _runFilter(rateFilter: true),
+                      ),
+                      const SizedBox(width: 10),
+                      FilterButton(
+                        label: "Free",
+                        onPressed: () => _runFilter(freeFilter: true),
+                      ),
+                      const SizedBox(width: 10),
+                      FilterButton(
+                        label: "Discount",
+                        onPressed: () => _runFilter(discountFilter: true),
+                      ),
+                      const SizedBox(width: 10),
+                      FilterButton(
+                        label: "Reset",
+                        onPressed: () => _runFilter(reset: true),
+                      ),
+                    ],
+                  ),
                 ),
-                const SizedBox(height: 30),
+                const SizedBox(height: 20),
                 Expanded(
                   child: FutureBuilder<List<Store>>(
                     future: futureStores,
