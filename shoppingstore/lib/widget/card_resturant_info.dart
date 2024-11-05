@@ -1,10 +1,20 @@
 import 'package:flutter/material.dart';
 
 class CardResturantInfo extends StatelessWidget {
-  const CardResturantInfo({super.key});
+  final String storeName;
+  final String storeLogo;
+  final double storeRate;
+
+  const CardResturantInfo({
+    super.key,
+    required this.storeName,
+    required this.storeLogo,
+    required this.storeRate,
+  });
 
   @override
   Widget build(BuildContext context) {
+    print(storeLogo);
     return Positioned(
       top: 180, // Adjust the vertical position of the card
       left: 16, // Adjust the horizontal position of the card
@@ -32,7 +42,7 @@ class CardResturantInfo extends StatelessWidget {
                   ),
                 ),
                 child: Image.network(
-                  "https://d2yugwrr6or5n1.cloudfront.net/uploads/1516002195.jpg",
+                  storeName,
                   width: 80, // Adjust width as needed
                   height: 70, // Adjust height as needed
                   fit: BoxFit.cover,
@@ -41,10 +51,10 @@ class CardResturantInfo extends StatelessWidget {
               const SizedBox(
                 width: 15,
               ),
-              const Column(
+              Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Text("Wooden house"),
+                  Text(storeLogo),
                   SizedBox(
                     height: 20,
                   ),
@@ -57,7 +67,7 @@ class CardResturantInfo extends StatelessWidget {
                       SizedBox(
                         width: 10,
                       ),
-                      Text('3.0')
+                      Text(storeRate.toString())
                     ],
                   )
                 ],

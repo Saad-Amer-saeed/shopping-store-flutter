@@ -23,14 +23,16 @@ class CardItemInfo extends StatelessWidget {
         padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 13),
         child: Row(
           children: [
-            const Column(
+            Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Text("French Fries"),
-                SizedBox(
+                Text(
+                  "${chosenstore.productName} IQD",
+                ),
+                const SizedBox(
                   height: 45,
                 ),
-                Text("4,000 IQ")
+                Text("${chosenstore.productPrice.toString()} IQD")
               ],
             ),
             const Spacer(),

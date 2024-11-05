@@ -4,12 +4,18 @@ import 'package:shoppingstore/model/store_merchants.dart';
 class CardMerchents extends StatelessWidget {
   const CardMerchents({super.key, required this.store, required this.onTap});
   final Store store;
-  final void Function(int storeId) onTap; // Accepts store ID
+  final void Function(
+      int storeId,
+      String storeBackgroundImage,
+      String storeName,
+      String storeLogo,
+      double storeRate) onTap; // Accepts store ID
 
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
-      onTap: () => onTap(store.storeId),
+      onTap: () => onTap(store.storeId, store.storeBackgroundImage,
+          store.storeName, store.storeLogo, store.storeRate),
       child: Card(
         elevation: 4.0, // Optional: Adds a shadow effect to the card
         child: SizedBox(

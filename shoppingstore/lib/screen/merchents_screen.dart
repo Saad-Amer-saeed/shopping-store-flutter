@@ -122,11 +122,13 @@ class _MerchentsScreenState extends State<MerchentsScreen> {
     );
   }
 
-  void _selectedStore(int storeId) {
+  void _selectedStore(
+      storeId, storeBackgroundImage, storeName, storeLogo, storeRate) {
     Navigator.push(
       context,
       MaterialPageRoute(
-        builder: (context) => StoreItemScreen(),
+        builder: (context) => StoreItemScreen(
+            storeId, storeBackgroundImage, storeName, storeLogo, storeRate),
       ),
     );
   }
@@ -196,7 +198,10 @@ class _MerchentsScreenState extends State<MerchentsScreen> {
                           margin: const EdgeInsets.symmetric(vertical: 8.0),
                           child: CardMerchents(
                             store: stores[index],
-                            onTap: (storeId) => _selectedStore(storeId),
+                            onTap: (storeId, storeBackgroundImage, storeName,
+                                    storeLogo, storeRate) =>
+                                _selectedStore(storeId, storeBackgroundImage,
+                                    storeName, storeLogo, storeRate),
                           ),
                         );
                       },

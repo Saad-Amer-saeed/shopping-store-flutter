@@ -5,7 +5,15 @@ import 'package:shoppingstore/model/store_products.dart';
 import 'package:shoppingstore/data/json_converter.dart';
 
 class StoreItemScreen extends StatefulWidget {
-  const StoreItemScreen({super.key});
+  final int storeId;
+  final String storeBackgroundImage;
+  final String storeName;
+  final String storeLogo;
+  final double storeRate;
+
+  const StoreItemScreen(this.storeId, this.storeBackgroundImage, this.storeLogo,
+      this.storeName, this.storeRate,
+      {super.key});
 
   @override
   State<StoreItemScreen> createState() {
@@ -24,8 +32,9 @@ class _StoreItemScreen extends State<StoreItemScreen> {
     product = loadProducts();
     product.then((allStoreItems) {
       setState(() {
-        chosenstore =
-            allStoreItems.where((item) => item.storeId == 75).toList();
+        chosenstore = allStoreItems
+            .where((item) => item.storeId == widget.storeId)
+            .toList();
       });
     });
   }
@@ -40,18 +49,22 @@ class _StoreItemScreen extends State<StoreItemScreen> {
             children: [
               // Background image
               Image.network(
-                "https://d2yugwrr6or5n1.cloudfront.net/uploads/1534413528.jpg",
+                widget.storeBackgroundImage,
                 width: double.infinity,
                 height: 250,
                 fit: BoxFit.cover,
               ),
               // Card overlay
-              const CardResturantInfo(),
+              CardResturantInfo(
+                storeName: widget.storeName,
+                storeLogo: widget.storeLogo,
+                storeRate: widget.storeRate,
+              ),
             ],
           ),
           // List of items
           const SizedBox(
-            height: 12,
+            height: 45,
           ),
           Expanded(
             child: FutureBuilder<List<Product>>(
@@ -73,7 +86,7 @@ class _StoreItemScreen extends State<StoreItemScreen> {
                       itemCount: chosenstore.length,
                       itemBuilder: (context, index) {
                         return Padding(
-                          padding: const EdgeInsets.symmetric(vertical: 4),
+                          padding: const EdgeInsets.only(bottom: 9),
                           child: CardItemInfo(chosenstore: chosenstore[index]),
                         );
                       },
