@@ -1,10 +1,34 @@
 import 'package:flutter/material.dart';
 import 'package:shoppingstore/widget/card_resturant_info.dart';
+import 'package:shoppingstore/widget/card_item_info.dart';
+import 'package:shoppingstore/model/store_products.dart';
+import 'package:shoppingstore/data/json_converter.dart';
 
-class StoreItemScreen extends StatelessWidget {
-  const StoreItemScreen({
-    super.key,
-  });
+class StoreItemScreen extends StatefulWidget {
+  const StoreItemScreen({super.key});
+
+  @override
+  State<StoreItemScreen> createState() {
+    return _StoreItemScreen();
+  }
+}
+
+class _StoreItemScreen extends State<StoreItemScreen> {
+  List<Product> chosenstore = [];
+  int test = 4;
+  late Future<List<Product>> product;
+
+  @override
+  void initState() {
+    super.initState();
+    product = loadProducts();
+    product.then((allStoreItems) {
+      setState(() {
+        chosenstore =
+            allStoreItems.where((item) => item.storeId == 75).toList();
+      });
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -25,82 +49,37 @@ class StoreItemScreen extends StatelessWidget {
               const CardResturantInfo(),
             ],
           ),
-          Padding(
-            padding: EdgeInsets.all(0),
-            child: Card(
-              margin: const EdgeInsets.symmetric(vertical: 44, horizontal: 8),
-              shape: RoundedRectangleBorder(
-                side: const BorderSide(
-                  color: Colors.grey, // Card border color
-                  width: 0.6, // Card border width
-                ),
-                borderRadius:
-                    BorderRadius.circular(8.0), // Rounded corners for the card
-              ),
-              color: Colors.white,
-              child: Padding(
-                padding:
-                    const EdgeInsets.symmetric(horizontal: 10, vertical: 13),
-                child: Row(
-                  children: [
-                    const Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Text("French Fries"),
-                        SizedBox(
-                          height: 45,
-                        ),
-                        Text("4,000 IQ")
-                      ],
-                    ),
-                    const Spacer(),
-                    // Image(
-                    //   image: NetworkImage(
-                    //       "https://d2yugwrr6or5n1.cloudfront.net/uploads/1514117109.png"),
-                    //   width: 100, // Specify a width if needed
-                    //   height: 100, // Specify a height if needed
-                    //   fit: BoxFit.cover, // Adjust the image fit
-                    // ),
-
-                    Stack(clipBehavior: Clip.none, children: [
-                      Container(
-                        decoration: BoxDecoration(
-                          // border: Border.all(
-                          //   color: Colors.grey, // Border color
-                          //   width: 2.0, // Border width
-                          // ),
-                          borderRadius:
-                              BorderRadius.circular(8.0), // Rounded corners
-                        ),
-                        child: ClipRRect(
-                          borderRadius:
-                              BorderRadius.circular(8.0), // Match border radius
-                          child: Image.network(
-                            "https://d2yugwrr6or5n1.cloudfront.net/uploads/1514117109.png",
-                            width: 100, // Adjust width as needed
-                            height: 100, // Adjust height as needed
-                            fit: BoxFit.cover,
-                          ),
-                        ),
-                      ),
-                      Positioned(
-                          right: 77,
-                          top: 74,
-                          child: IconButton(
-                            onPressed: () {},
-                            icon: const Icon(
-                              Icons.add_circle,
-                              color: Color(0xFFDE3163),
-                            ),
-                            // iconSize: 35,
-                          ))
-                    ]),
-
-                    // You can add more widgets here in the Row if needed
-                  ],
-                ),
-              ),
-            ),
+          // List of items
+          const SizedBox(
+            height: 12,
+          ),
+          Expanded(
+            child: FutureBuilder<List<Product>>(
+                future: product,
+                builder: (context, snapshot) {
+                  if (snapshot.connectionState == ConnectionState.waiting) {
+                    return const Center(
+                        child:
+                            CircularProgressIndicator()); // Loading indicator
+                  } else if (snapshot.hasError) {
+                    return Center(
+                        child:
+                            Text('Error: ${snapshot.error}')); // Error message
+                  } else if (chosenstore.isEmpty) {
+                    return const Center(
+                        child: Text('No items available for this store.'));
+                  } else {
+                    return ListView.builder(
+                      itemCount: chosenstore.length,
+                      itemBuilder: (context, index) {
+                        return Padding(
+                          padding: const EdgeInsets.symmetric(vertical: 4),
+                          child: CardItemInfo(chosenstore: chosenstore[index]),
+                        );
+                      },
+                    );
+                  }
+                }),
           ),
         ],
       ),
