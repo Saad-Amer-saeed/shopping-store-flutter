@@ -3,6 +3,7 @@ import 'package:shoppingstore/widget/card_merchents.dart';
 import 'package:shoppingstore/model/store_merchants.dart';
 import 'package:shoppingstore/data/json_converter.dart';
 import 'package:shoppingstore/widget/filter_button .dart';
+import 'package:shoppingstore/widget/show_dialog.dart';
 import 'package:shoppingstore/widget/sort_options_dialog.dart';
 import 'package:shoppingstore/screen/store_item_screen.dart';
 
@@ -128,21 +129,7 @@ class _MerchentsScreenState extends State<MerchentsScreen> {
       // Show the dialog when the store is closed
       showDialog<String>(
         context: context,
-        builder: (BuildContext context) => AlertDialog(
-          title: const Text('Store Closed'),
-          content: const Text(
-              'This store is currently closed. Please try again later.'),
-          actions: <Widget>[
-            TextButton(
-              onPressed: () => Navigator.pop(context, 'Cancel'),
-              child: const Text('Cancel'),
-            ),
-            TextButton(
-              onPressed: () => Navigator.pop(context, 'OK'),
-              child: const Text('OK'),
-            ),
-          ],
-        ),
+        builder: (BuildContext context) => const ShowDialog(),
       );
     } else {
       // Navigate to the store page if the store is open

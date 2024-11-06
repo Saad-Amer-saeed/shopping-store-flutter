@@ -62,14 +62,6 @@ class CardItemInfo extends StatelessWidget {
               ),
             ),
             const Spacer(),
-            // Image(
-            //   image: NetworkImage(
-            //       "https://d2yugwrr6or5n1.cloudfront.net/uploads/1514117109.png"),
-            //   width: 100, // Specify a width if needed
-            //   height: 100, // Specify a height if needed
-            //   fit: BoxFit.cover, // Adjust the image fit
-            // ),
-
             Stack(
               clipBehavior: Clip.none,
               children: [
@@ -137,8 +129,6 @@ class CardItemInfo extends StatelessWidget {
                 // Icon button
               ],
             ),
-
-            // You can add more widgets here in the Row if needed
           ],
         ),
       ),

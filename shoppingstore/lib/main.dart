@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:shoppingstore/screen/merchents_screen.dart';
+import 'package:shoppingstore/screen/nav_screen.dart';
 
 void main() {
   runApp(const App());
@@ -15,8 +16,8 @@ class App extends StatelessWidget {
         scaffoldBackgroundColor:
             Colors.white, // Set the default background color to white
       ),
-      home: const Scaffold(
-        body: MerchentsScreen(),
+      home: Scaffold(
+        body: TabNavigationScreen(),
       ),
     );
   }

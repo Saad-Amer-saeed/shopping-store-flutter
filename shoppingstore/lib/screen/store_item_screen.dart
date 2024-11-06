@@ -46,7 +46,6 @@ class _StoreItemScreen extends State<StoreItemScreen> {
           Stack(
             clipBehavior: Clip.none,
             children: [
-              // Background image
               Image.network(
                 widget.storeBackgroundImage,
                 width: double.infinity,
