@@ -123,7 +123,7 @@ class _MerchentsScreenState extends State<MerchentsScreen> {
   }
 
   void _selectedStore(storeId, storeBackgroundImage, storeName, storeLogo,
-      storeRate, isStoreOpen) {
+      storeRate, isStoreOpen, discountPercentage) {
     if (isStoreOpen == false) {
       // Show the dialog when the store is closed
       showDialog<String>(
@@ -149,8 +149,8 @@ class _MerchentsScreenState extends State<MerchentsScreen> {
       Navigator.push(
         context,
         MaterialPageRoute(
-          builder: (context) => StoreItemScreen(
-              storeId, storeBackgroundImage, storeName, storeLogo, storeRate),
+          builder: (context) => StoreItemScreen(storeId, storeBackgroundImage,
+              storeName, storeLogo, storeRate, discountPercentage),
         ),
       );
     }
@@ -221,15 +221,21 @@ class _MerchentsScreenState extends State<MerchentsScreen> {
                           margin: const EdgeInsets.symmetric(vertical: 8.0),
                           child: CardMerchents(
                             store: stores[index],
-                            onTap: (storeId, storeBackgroundImage, storeName,
-                                    storeLogo, storeRate, isStoreOpen) =>
+                            onTap: (storeId,
+                                    storeBackgroundImage,
+                                    storeName,
+                                    storeLogo,
+                                    storeRate,
+                                    isStoreOpen,
+                                    discountPercentage) =>
                                 _selectedStore(
                                     storeId,
                                     storeBackgroundImage,
                                     storeName,
                                     storeLogo,
                                     storeRate,
-                                    isStoreOpen),
+                                    isStoreOpen,
+                                    discountPercentage),
                           ),
                         );
                       },

@@ -10,9 +10,9 @@ class StoreItemScreen extends StatefulWidget {
   final String storeName;
   final String storeLogo;
   final double storeRate;
-
+  final int discountPercentage;
   const StoreItemScreen(this.storeId, this.storeBackgroundImage, this.storeLogo,
-      this.storeName, this.storeRate,
+      this.storeName, this.storeRate, this.discountPercentage,
       {super.key});
 
   @override
@@ -109,7 +109,9 @@ class _StoreItemScreen extends State<StoreItemScreen> {
                       itemBuilder: (context, index) {
                         return Padding(
                           padding: const EdgeInsets.only(bottom: 9),
-                          child: CardItemInfo(chosenstore: chosenstore[index]),
+                          child: CardItemInfo(
+                              chosenstore: chosenstore[index],
+                              discountPercentage: widget.discountPercentage),
                         );
                       },
                     );

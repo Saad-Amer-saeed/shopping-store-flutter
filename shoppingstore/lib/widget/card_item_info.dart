@@ -2,10 +2,11 @@ import 'package:flutter/material.dart';
 import 'package:shoppingstore/model/store_products.dart';
 
 class CardItemInfo extends StatelessWidget {
-  const CardItemInfo({super.key, required this.chosenstore});
+  const CardItemInfo(
+      {super.key, required this.chosenstore, required this.discountPercentage});
 
   final Product chosenstore;
-
+  final int discountPercentage;
   @override
   Widget build(BuildContext context) {
     int a = 5;
@@ -39,11 +40,22 @@ class CardItemInfo extends StatelessWidget {
                   ),
                   Row(
                     children: [
-                      Text("${chosenstore.productPrice.toString()} IQD"),
+                      Text(
+                        "${chosenstore.productPrice.toString()} IQD",
+                        style: TextStyle(
+                          decoration: discountPercentage > 0
+                              ? TextDecoration.lineThrough
+                              : TextDecoration.none,
+                        ),
+                      ),
                       const SizedBox(
                         width: 22,
                       ),
-                      Text('4400')
+                      if (discountPercentage > 0)
+                        Text(
+                          "${(chosenstore.productPrice * (1 - discountPercentage / 100)).toStringAsFixed(0)} IQD",
+                          style: const TextStyle(color: Colors.red),
+                        ),
                     ],
                   )
                 ],
