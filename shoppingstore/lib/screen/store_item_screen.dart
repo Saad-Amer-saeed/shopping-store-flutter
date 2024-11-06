@@ -23,7 +23,6 @@ class StoreItemScreen extends StatefulWidget {
 
 class _StoreItemScreen extends State<StoreItemScreen> {
   List<Product> chosenstore = [];
-  int test = 4;
   late Future<List<Product>> product;
 
   @override
@@ -53,12 +52,35 @@ class _StoreItemScreen extends State<StoreItemScreen> {
                 width: double.infinity,
                 height: 250,
                 fit: BoxFit.cover,
+                errorBuilder: (context, error, stackTrace) {
+                  return Image.network(
+                    "https://lezzooeats-uploads.s3.us-east-2.amazonaws.com/lezzoo_placeholder+(1).png",
+                    width: double.infinity,
+                    height: 250,
+                    fit: BoxFit.cover,
+                  );
+                },
               ),
+
               // Card overlay
               CardResturantInfo(
                 storeName: widget.storeName,
                 storeLogo: widget.storeLogo,
                 storeRate: widget.storeRate,
+              ),
+              // Back button
+              Positioned(
+                top: 20, // Adjust the position as needed
+                left: 7, // Adjust the position as needed
+                child: IconButton(
+                  icon:
+                      const Icon(Icons.arrow_circle_left, color: Colors.black),
+                  iconSize: 27, // You can change the color
+                  onPressed: () {
+                    Navigator.of(context)
+                        .pop(); // Go back to the previous screen
+                  },
+                ),
               ),
             ],
           ),
