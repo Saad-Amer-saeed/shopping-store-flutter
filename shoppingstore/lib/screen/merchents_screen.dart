@@ -122,15 +122,38 @@ class _MerchentsScreenState extends State<MerchentsScreen> {
     );
   }
 
-  void _selectedStore(
-      storeId, storeBackgroundImage, storeName, storeLogo, storeRate) {
-    Navigator.push(
-      context,
-      MaterialPageRoute(
-        builder: (context) => StoreItemScreen(
-            storeId, storeBackgroundImage, storeName, storeLogo, storeRate),
-      ),
-    );
+  void _selectedStore(storeId, storeBackgroundImage, storeName, storeLogo,
+      storeRate, isStoreOpen) {
+    if (isStoreOpen == false) {
+      // Show the dialog when the store is closed
+      showDialog<String>(
+        context: context,
+        builder: (BuildContext context) => AlertDialog(
+          title: const Text('Store Closed'),
+          content: const Text(
+              'This store is currently closed. Please try again later.'),
+          actions: <Widget>[
+            TextButton(
+              onPressed: () => Navigator.pop(context, 'Cancel'),
+              child: const Text('Cancel'),
+            ),
+            TextButton(
+              onPressed: () => Navigator.pop(context, 'OK'),
+              child: const Text('OK'),
+            ),
+          ],
+        ),
+      );
+    } else {
+      // Navigate to the store page if the store is open
+      Navigator.push(
+        context,
+        MaterialPageRoute(
+          builder: (context) => StoreItemScreen(
+              storeId, storeBackgroundImage, storeName, storeLogo, storeRate),
+        ),
+      );
+    }
   }
 
   @override
@@ -199,9 +222,14 @@ class _MerchentsScreenState extends State<MerchentsScreen> {
                           child: CardMerchents(
                             store: stores[index],
                             onTap: (storeId, storeBackgroundImage, storeName,
-                                    storeLogo, storeRate) =>
-                                _selectedStore(storeId, storeBackgroundImage,
-                                    storeName, storeLogo, storeRate),
+                                    storeLogo, storeRate, isStoreOpen) =>
+                                _selectedStore(
+                                    storeId,
+                                    storeBackgroundImage,
+                                    storeName,
+                                    storeLogo,
+                                    storeRate,
+                                    isStoreOpen),
                           ),
                         );
                       },

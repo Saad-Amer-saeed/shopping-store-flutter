@@ -9,13 +9,14 @@ class CardMerchents extends StatelessWidget {
       String storeBackgroundImage,
       String storeName,
       String storeLogo,
-      double storeRate) onTap; // Accepts store ID
+      double storeRate,
+      bool isStoreOpen) onTap; // Accepts store ID
 
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
       onTap: () => onTap(store.storeId, store.storeBackgroundImage,
-          store.storeName, store.storeLogo, store.storeRate),
+          store.storeName, store.storeLogo, store.storeRate, store.isStoreOpen),
       child: Card(
         elevation: 4.0, // Optional: Adds a shadow effect to the card
         child: SizedBox(

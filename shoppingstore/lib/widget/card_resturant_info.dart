@@ -14,7 +14,6 @@ class CardResturantInfo extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    print(storeLogo);
     return Positioned(
       top: 180, // Adjust the vertical position of the card
       left: 16, // Adjust the horizontal position of the card
@@ -36,16 +35,21 @@ class CardResturantInfo extends StatelessWidget {
             children: [
               Container(
                 decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(8.0),
                   border: Border.all(
                     color: Colors.grey, // Border color
                     width: 1.0, // Border width
                   ),
                 ),
-                child: Image.network(
-                  storeName,
-                  width: 80, // Adjust width as needed
-                  height: 70, // Adjust height as needed
-                  fit: BoxFit.cover,
+                child: ClipRRect(
+                  borderRadius:
+                      BorderRadius.circular(8.0), // Adjust the radius as needed
+                  child: Image.network(
+                    storeName,
+                    width: 80, // Adjust width as needed
+                    height: 70, // Adjust height as needed
+                    fit: BoxFit.cover,
+                  ),
                 ),
               ),
               const SizedBox(
@@ -55,16 +59,16 @@ class CardResturantInfo extends StatelessWidget {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Text(storeLogo),
-                  SizedBox(
+                  const SizedBox(
                     height: 20,
                   ),
                   Row(
                     children: [
-                      Icon(
+                      const Icon(
                         Icons.star,
                         color: Color(0xFFFFE234),
                       ),
-                      SizedBox(
+                      const SizedBox(
                         width: 10,
                       ),
                       Text(storeRate.toString())
