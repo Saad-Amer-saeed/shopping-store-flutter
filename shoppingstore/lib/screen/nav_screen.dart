@@ -1,16 +1,18 @@
 import 'package:flutter/material.dart';
 import 'package:shoppingstore/screen/basket_screen.dart';
 import 'package:shoppingstore/screen/merchents_screen.dart';
+import 'package:badges/badges.dart' as badges;
 
 class TabNavigationScreen extends StatefulWidget {
+  const TabNavigationScreen({Key? key}) : super(key: key);
+
   @override
-  State<TabNavigationScreen> createState() {
-    return _TabNavigationScreenState();
-  }
+  State<TabNavigationScreen> createState() => _TabNavigationScreenState();
 }
 
 class _TabNavigationScreenState extends State<TabNavigationScreen> {
   int _selectedIndex = 0;
+  final int _basketItemCount = 3; // Mock basket item count
 
   // List of pages to show for each tab
   final List<Widget> _pages = <Widget>[
@@ -30,13 +32,19 @@ class _TabNavigationScreenState extends State<TabNavigationScreen> {
     return Scaffold(
       body: _pages[_selectedIndex], // Display the selected page
       bottomNavigationBar: BottomNavigationBar(
-        items: const <BottomNavigationBarItem>[
-          BottomNavigationBarItem(
+        items: <BottomNavigationBarItem>[
+          const BottomNavigationBarItem(
             icon: Icon(Icons.home),
             label: 'Home',
           ),
           BottomNavigationBarItem(
-            icon: Icon(Icons.badge),
+            icon: badges.Badge(
+              badgeContent: Text(
+                '$_basketItemCount',
+                style: const TextStyle(color: Colors.white),
+              ),
+              child: const Icon(Icons.shopping_cart),
+            ),
             label: 'Basket',
           ),
         ],
