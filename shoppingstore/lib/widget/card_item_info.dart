@@ -55,7 +55,8 @@ class CardItemInfo extends StatelessWidget {
                       ),
                       if (discountPercentage > 0)
                         Text(
-                          "${(chosenstore.productPrice * (1 - discountPercentage / 100)).toStringAsFixed(0)} IQD",
+                          // Format the discounted price
+                          "${NumberFormat('#,##0').format(chosenstore.productPrice * (1 - discountPercentage / 100))} IQD",
                           style: const TextStyle(color: Colors.red),
                         ),
                     ],
