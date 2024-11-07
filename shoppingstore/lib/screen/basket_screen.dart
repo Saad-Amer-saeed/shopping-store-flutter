@@ -16,7 +16,7 @@ class BasketScreen extends StatefulWidget {
 class _BasketScreenState extends State<BasketScreen> {
   // State variable for the item count
   int _itemCount = 0;
-
+  bool test = false;
   void _onItemCountChanged(num value) {
     setState(() {
       _itemCount = value.toInt(); // Update the item count when it changes
@@ -28,12 +28,15 @@ class _BasketScreenState extends State<BasketScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        leading: IconButton(
-          icon: const Icon(Icons.arrow_back), // The back button icon
-          onPressed: () {
-            Navigator.pop(context); // Pops the current screen off the stack
-          },
-        ),
+        leading: test
+            ? IconButton(
+                icon: const Icon(Icons.arrow_back), // The back button icon
+                onPressed: () {
+                  Navigator.pop(
+                      context); // Pops the current screen off the stack
+                },
+              )
+            : SizedBox(),
         actions: [
           IconButton(
             icon: const Icon(Icons.shopping_cart), // Change icon as needed
