@@ -31,10 +31,9 @@ class _CardItemInfoState extends ConsumerState<CardItemInfo> {
 
   @override
   Widget build(BuildContext context) {
-    final basketList = ref.watch(basketProvider);
-    final totalPrice = ref.watch(basketProvider.notifier).totalPrice;
+    // final basketList = ref.watch(basketProvider);
+    // final totalPrice = ref.watch(basketProvider.notifier).totalPrice;
 
-    print(totalPrice);
     return Card(
       margin: const EdgeInsets.symmetric(horizontal: 8),
       shape: RoundedRectangleBorder(
