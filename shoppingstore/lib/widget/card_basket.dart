@@ -3,10 +3,15 @@ import 'package:item_count_number_button/item_count_number_button.dart';
 import 'package:shoppingstore/model/stroe_basket.dart';
 
 class CardBasket extends StatefulWidget {
-  const CardBasket({super.key, required this.basketitem});
+  const CardBasket(
+      {super.key,
+      required this.basketitem,
+      required this.onAddToBasket,
+      required this.removeOrUpdateItem});
 
   final Basket basketitem;
-
+  final Function(int productId) onAddToBasket;
+  final Function(int productId) removeOrUpdateItem;
   @override
   _CardBasketState createState() => _CardBasketState();
 }
@@ -15,10 +20,17 @@ class _CardBasketState extends State<CardBasket> {
   int _itemCount = 0; // Variable to hold the item count
 
   void _onItemCountChanged(num value) {
+    if (widget.basketitem.productQuantity < value) {
+      widget.onAddToBasket(widget.basketitem.productId);
+      print('yes');
+    } else {
+      widget.removeOrUpdateItem(widget.basketitem.productId);
+      print('No');
+    }
+
     setState(() {
       _itemCount = value.toInt(); // Update the item count when it changes
     });
-    print('Selected value: $_itemCount');
   }
 
   @override
@@ -42,7 +54,7 @@ class _CardBasketState extends State<CardBasket> {
               child: ClipRRect(
                 borderRadius: BorderRadius.circular(8.0),
                 child: Image.network(
-                  widget.basketitem.productImage,
+                  widget.basketitem.productImage!,
                   width: 100, // Adjust width as needed
                   height: 100, // Adjust height as needed
                   fit: BoxFit.cover,
@@ -62,7 +74,7 @@ class _CardBasketState extends State<CardBasket> {
             Flexible(
               flex: 1,
               child: Text(
-                widget.basketitem.productName,
+                widget.basketitem.productName!,
                 style:
                     const TextStyle(fontSize: 14, fontWeight: FontWeight.bold),
                 textAlign: TextAlign.start,
@@ -76,7 +88,7 @@ class _CardBasketState extends State<CardBasket> {
             Column(
               children: [
                 Text(
-                  widget.basketitem.productPrice.toString(),
+                  widget.basketitem.productsTotalprice.toString(),
                   style: const TextStyle(fontSize: 14, color: Colors.green),
                 ),
                 const SizedBox(height: 20),

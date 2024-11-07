@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:shoppingstore/widget/card_basket.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart'; // Ensure you're importing Riverpod
 import 'package:shoppingstore/provider/basket_provider.dart';
+import 'package:shoppingstore/model/stroe_basket.dart';
 
 // Basket Screen Widget
 class BasketScreen extends ConsumerStatefulWidget {
@@ -16,8 +17,20 @@ class BasketScreen extends ConsumerStatefulWidget {
 
 class _BasketScreenState extends ConsumerState<BasketScreen> {
   // State variable for the item count
-  int _itemCount = 0;
   bool test = false;
+  void addToBasket(int id) {
+    final basketItem = Basket(
+      productId: id,
+    );
+
+    // Add or update the item in the basket using the notifier
+    ref.read(basketProvider.notifier).addOrUpdateBasket(basketItem);
+  }
+
+  void removeorUpdateItem(int id) {
+    // Add or update the item in the basket using the notifier
+    ref.read(basketProvider.notifier).removeOrUpdateItem(id);
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -59,8 +72,9 @@ class _BasketScreenState extends ConsumerState<BasketScreen> {
               basketList.length, // Dynamically setting the number of items
           itemBuilder: (context, index) {
             return CardBasket(
-              basketitem: basketList[index],
-            );
+                basketitem: basketList[index],
+                onAddToBasket: addToBasket,
+                removeOrUpdateItem: removeorUpdateItem);
           },
         ),
       ),
