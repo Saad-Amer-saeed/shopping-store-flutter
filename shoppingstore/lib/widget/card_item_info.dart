@@ -42,8 +42,7 @@ class CardItemInfo extends StatelessWidget {
                   Row(
                     children: [
                       Text(
-                        NumberFormat('#,##0').format(chosenstore.productPrice),
-                        // "${chosenstore.productPrice.toString()} IQD",
+                        "${NumberFormat('#,##0').format(chosenstore.productPrice)} IQD ",
                         style: TextStyle(
                           decoration: discountPercentage > 0
                               ? TextDecoration.lineThrough

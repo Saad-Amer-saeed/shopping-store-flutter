@@ -1,3 +1,5 @@
+import 'dart:ffi';
+
 import 'package:flutter/material.dart';
 import 'package:shoppingstore/screen/basket_screen.dart';
 import 'package:shoppingstore/screen/merchents_screen.dart';
@@ -13,8 +15,7 @@ class TabNavigationScreen extends StatefulWidget {
 
 class _TabNavigationScreenState extends State<TabNavigationScreen> {
   int _selectedIndex = 0;
-  final int _basketItemCount = 3; // Mock basket item count
-
+  final int _basketItemCount = 0; // Mock basket item count
   // Customizable values
   double horizontalMargin = 0; // Horizontal margin
   double borderRadiusValue = 1; // Border radius for bottom navigation bar
@@ -64,13 +65,15 @@ class _TabNavigationScreenState extends State<TabNavigationScreen> {
                 label: 'Home',
               ),
               BottomNavigationBarItem(
-                icon: badges.Badge(
-                  badgeContent: Text(
-                    '$_basketItemCount',
-                    style: const TextStyle(color: Colors.white),
-                  ),
-                  child: const Icon(Icons.shopping_cart),
-                ),
+                icon: _basketItemCount < 1
+                    ? const Icon(Icons.shopping_cart)
+                    : badges.Badge(
+                        badgeContent: Text(
+                          '$_basketItemCount',
+                          style: const TextStyle(color: Colors.white),
+                        ),
+                        child: const Icon(Icons.shopping_cart),
+                      ),
                 label: 'Basket',
               ),
               const BottomNavigationBarItem(

@@ -36,7 +36,7 @@ class _BasketScreenState extends State<BasketScreen> {
                       context); // Pops the current screen off the stack
                 },
               )
-            : SizedBox(),
+            : const SizedBox(),
         actions: [
           IconButton(
             icon: const Icon(Icons.shopping_cart), // Change icon as needed
