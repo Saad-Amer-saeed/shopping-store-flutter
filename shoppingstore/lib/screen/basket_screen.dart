@@ -1,31 +1,30 @@
 import 'dart:ui';
 import 'package:flutter/material.dart';
 import 'package:shoppingstore/widget/card_basket.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart'; // Ensure you're importing Riverpod
+import 'package:shoppingstore/provider/basket_provider.dart';
 
 // Basket Screen Widget
-class BasketScreen extends StatefulWidget {
+class BasketScreen extends ConsumerStatefulWidget {
   const BasketScreen({super.key});
 
   @override
-  State<BasketScreen> createState() {
+  ConsumerState<BasketScreen> createState() {
     return _BasketScreenState();
   }
 }
 
-class _BasketScreenState extends State<BasketScreen> {
+class _BasketScreenState extends ConsumerState<BasketScreen> {
   // State variable for the item count
   int _itemCount = 0;
   bool test = false;
 
-  // void _onItemCountChanged(num value) {
-  //   setState(() {
-  //     _itemCount = value.toInt(); // Update the item count when it changes
-  //   });
-  //   print('Selected value: $_itemCount');
-  // }
-
   @override
   Widget build(BuildContext context) {
+    // Using ref.watch to read basketProvider
+    final basketList = ref.watch(basketProvider);
+    final totalPrice = ref.watch(basketProvider.notifier).totalPrice;
+
     return Scaffold(
       appBar: AppBar(
         leading: test
@@ -56,9 +55,12 @@ class _BasketScreenState extends State<BasketScreen> {
       body: Container(
         margin: const EdgeInsets.symmetric(horizontal: 12, vertical: 12),
         child: ListView.builder(
-          itemCount: 12, // Number of items in the list
+          itemCount:
+              basketList.length, // Dynamically setting the number of items
           itemBuilder: (context, index) {
-            return CardBasket();
+            return CardBasket(
+              basketitem: basketList[index],
+            );
           },
         ),
       ),

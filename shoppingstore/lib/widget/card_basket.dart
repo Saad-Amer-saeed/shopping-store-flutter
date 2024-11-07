@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:item_count_number_button/item_count_number_button.dart';
+import 'package:shoppingstore/model/stroe_basket.dart';
 
 class CardBasket extends StatefulWidget {
-  const CardBasket({super.key});
-  // Function to pass the updated item count
+  const CardBasket({super.key, required this.basketitem});
+
+  final Basket basketitem;
 
   @override
   _CardBasketState createState() => _CardBasketState();
@@ -17,7 +19,6 @@ class _CardBasketState extends State<CardBasket> {
       _itemCount = value.toInt(); // Update the item count when it changes
     });
     print('Selected value: $_itemCount');
-    // Pass the updated value to the parent widget
   }
 
   @override
@@ -28,6 +29,7 @@ class _CardBasketState extends State<CardBasket> {
         padding: const EdgeInsets.all(8.0),
         child: Row(
           crossAxisAlignment: CrossAxisAlignment.start,
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
             Container(
               decoration: BoxDecoration(
@@ -40,7 +42,7 @@ class _CardBasketState extends State<CardBasket> {
               child: ClipRRect(
                 borderRadius: BorderRadius.circular(8.0),
                 child: Image.network(
-                  "https://d2yugwrr6or5n1.cloudfront.net/uploads/1537355615.jpg",
+                  widget.basketitem.productImage,
                   width: 100, // Adjust width as needed
                   height: 100, // Adjust height as needed
                   fit: BoxFit.cover,
@@ -55,31 +57,34 @@ class _CardBasketState extends State<CardBasket> {
                 ),
               ),
             ),
-            const SizedBox(
-              width: 20,
+            const SizedBox(width: 20),
+            // Use a Flexible widget to restrict the space used by the Text widget
+            Flexible(
+              flex: 1,
+              child: Text(
+                widget.basketitem.productName,
+                style:
+                    const TextStyle(fontSize: 14, fontWeight: FontWeight.bold),
+                textAlign: TextAlign.start,
+                overflow:
+                    TextOverflow.ellipsis, // This will clip the text with '...'
+                maxLines: 1,
+              ),
             ),
-            const Text(
-              'Double Whooper',
-              style: TextStyle(fontSize: 14, fontWeight: FontWeight.bold),
-            ),
-            const SizedBox(
-              width: 40,
-            ),
+            const SizedBox(width: 40),
+            // Price Text
             Column(
-              mainAxisAlignment: MainAxisAlignment.start,
-              mainAxisSize: MainAxisSize.min,
               children: [
-                const Text(
-                  '29,500 IQD',
-                  style: TextStyle(fontSize: 14, color: Colors.green),
+                Text(
+                  widget.basketitem.productPrice.toString(),
+                  style: const TextStyle(fontSize: 14, color: Colors.green),
                 ),
-                const SizedBox(
-                  height: 20,
-                ),
+                const SizedBox(height: 20),
+                // ItemCount widget for quantity selection
                 ItemCount(
                   color: const Color.fromARGB(255, 222, 49, 99),
-                  initialValue:
-                      _itemCount, // Set the initial value to the current state
+                  initialValue: widget.basketitem
+                      .productQuantity, // Set the initial value to the current state
                   minValue: 0,
                   maxValue: 10,
                   decimalPlaces: 0,
