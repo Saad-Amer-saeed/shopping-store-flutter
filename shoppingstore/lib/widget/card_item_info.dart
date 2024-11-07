@@ -1,16 +1,40 @@
 import 'package:flutter/material.dart';
 import 'package:shoppingstore/model/store_products.dart';
 import 'package:intl/intl.dart';
+import 'package:shoppingstore/model/stroe_basket.dart';
+import 'package:shoppingstore/provider/basket_provider.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-class CardItemInfo extends StatelessWidget {
-  const CardItemInfo(
+class CardItemInfo extends ConsumerStatefulWidget {
+  CardItemInfo(
       {super.key, required this.chosenstore, required this.discountPercentage});
 
   final Product chosenstore;
   final int discountPercentage;
+
+  @override
+  _CardItemInfoState createState() => _CardItemInfoState();
+}
+
+class _CardItemInfoState extends ConsumerState<CardItemInfo> {
+  void _addToBasket() {
+    final basketItem = Basket(
+      productId: widget.chosenstore.productId,
+      productName: widget.chosenstore.productName,
+      productImage: widget.chosenstore.productImage,
+      productPrice: widget.chosenstore.productPrice,
+    );
+
+    // Add or update the item in the basket using the notifier
+    ref.read(basketProvider.notifier).addOrUpdateBasket(basketItem);
+  }
+
   @override
   Widget build(BuildContext context) {
-    int a = 5;
+    final basketList = ref.watch(basketProvider);
+    final totalPrice = ref.watch(basketProvider.notifier).totalPrice;
+
+    print(totalPrice);
     return Card(
       margin: const EdgeInsets.symmetric(horizontal: 8),
       shape: RoundedRectangleBorder(
@@ -32,7 +56,7 @@ class CardItemInfo extends StatelessWidget {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Text(
-                    chosenstore.productName,
+                    widget.chosenstore.productName,
                     overflow: TextOverflow.ellipsis, // Prevents text overflow
                     maxLines: 2, // Limits text to a single line
                   ),
@@ -42,9 +66,9 @@ class CardItemInfo extends StatelessWidget {
                   Row(
                     children: [
                       Text(
-                        "${NumberFormat('#,##0').format(chosenstore.productPrice)} IQD ",
+                        "${NumberFormat('#,##0').format(widget.chosenstore.productPrice)} IQD ",
                         style: TextStyle(
-                          decoration: discountPercentage > 0
+                          decoration: widget.discountPercentage > 0
                               ? TextDecoration.lineThrough
                               : TextDecoration.none,
                         ),
@@ -52,10 +76,10 @@ class CardItemInfo extends StatelessWidget {
                       const SizedBox(
                         width: 22,
                       ),
-                      if (discountPercentage > 0)
+                      if (widget.discountPercentage > 0)
                         Text(
                           // Format the discounted price
-                          "${NumberFormat('#,##0').format(chosenstore.productPrice * (1 - discountPercentage / 100))} IQD",
+                          "${NumberFormat('#,##0').format(widget.chosenstore.productPrice * (1 - widget.discountPercentage / 100))} IQD",
                           style: const TextStyle(color: Colors.red),
                         ),
                     ],
@@ -68,7 +92,6 @@ class CardItemInfo extends StatelessWidget {
               clipBehavior: Clip.none,
               children: [
                 // Image with border
-
                 Container(
                   decoration: BoxDecoration(
                     borderRadius: BorderRadius.circular(8.0),
@@ -80,7 +103,7 @@ class CardItemInfo extends StatelessWidget {
                   child: ClipRRect(
                     borderRadius: BorderRadius.circular(8.0),
                     child: Image.network(
-                      chosenstore.productImage,
+                      widget.chosenstore.productImage,
                       width: 100, // Adjust width as needed
                       height: 100, // Adjust height as needed
                       fit: BoxFit.cover,
@@ -97,7 +120,7 @@ class CardItemInfo extends StatelessWidget {
                 ),
 
                 // Overlay for "Close" text when store is closed
-                if (chosenstore.productStock == 0)
+                if (widget.chosenstore.productStock == 0)
                   Container(
                     width: 100, // Match image width
                     height: 100, // Match image height
@@ -116,19 +139,18 @@ class CardItemInfo extends StatelessWidget {
                       ),
                     ),
                   ),
-                if (chosenstore.productStock > 0)
+                if (widget.chosenstore.productStock > 0)
                   Positioned(
-                      right: 77,
-                      top: 74,
-                      child: IconButton(
-                        onPressed: () {},
-                        icon: const Icon(
-                          Icons.add_circle,
-                          color: Color(0xFFDE3163),
-                        ),
-                        // iconSize: 35,
-                      )),
-                // Icon button
+                    right: 77,
+                    top: 74,
+                    child: IconButton(
+                      onPressed: _addToBasket,
+                      icon: const Icon(
+                        Icons.add_circle,
+                        color: Color(0xFFDE3163),
+                      ),
+                    ),
+                  ),
               ],
             ),
           ],
