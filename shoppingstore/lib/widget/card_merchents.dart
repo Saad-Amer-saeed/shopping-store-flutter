@@ -25,6 +25,7 @@ class CardMerchents extends StatelessWidget {
           store.isStoreOpen,
           store.discountPercentage),
       child: Card(
+        color: Colors.white,
         elevation: 4.0, // Optional: Adds a shadow effect to the card
         child: SizedBox(
           width: double.infinity,

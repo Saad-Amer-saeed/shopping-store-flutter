@@ -10,9 +10,12 @@ class FilterButton extends StatelessWidget {
   Widget build(BuildContext context) {
     return ElevatedButton(
       onPressed: onPressed,
+      style: ElevatedButton.styleFrom(
+        backgroundColor: Colors.white, // Set background color to white
+      ),
       child: Text(
         label,
-        style: const TextStyle(color: Colors.black),
+        style: const TextStyle(color: Colors.black), // Text color remains black
       ),
     );
   }

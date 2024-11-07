@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:shoppingstore/screen/basket_screen.dart';
 import 'package:shoppingstore/screen/merchents_screen.dart';
+import 'package:shoppingstore/screen/login_screen.dart';
 import 'package:badges/badges.dart' as badges;
 
 class TabNavigationScreen extends StatefulWidget {
@@ -18,6 +19,7 @@ class _TabNavigationScreenState extends State<TabNavigationScreen> {
   final List<Widget> _pages = <Widget>[
     const MerchentsScreen(),
     BasketScreen(),
+    LoginPage(),
   ];
 
   // Change the selected index
@@ -32,6 +34,7 @@ class _TabNavigationScreenState extends State<TabNavigationScreen> {
     return Scaffold(
       body: _pages[_selectedIndex], // Display the selected page
       bottomNavigationBar: BottomNavigationBar(
+        backgroundColor: Colors.white,
         items: <BottomNavigationBarItem>[
           const BottomNavigationBarItem(
             icon: Icon(Icons.home),
@@ -46,6 +49,10 @@ class _TabNavigationScreenState extends State<TabNavigationScreen> {
               child: const Icon(Icons.shopping_cart),
             ),
             label: 'Basket',
+          ),
+          const BottomNavigationBarItem(
+            icon: Icon(Icons.login),
+            label: 'Login',
           ),
         ],
         currentIndex: _selectedIndex,
