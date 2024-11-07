@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:shoppingstore/model/store_products.dart';
+import 'package:intl/intl.dart';
 
 class CardItemInfo extends StatelessWidget {
   const CardItemInfo(
@@ -41,7 +42,8 @@ class CardItemInfo extends StatelessWidget {
                   Row(
                     children: [
                       Text(
-                        "${chosenstore.productPrice.toString()} IQD",
+                        NumberFormat('#,##0').format(chosenstore.productPrice),
+                        // "${chosenstore.productPrice.toString()} IQD",
                         style: TextStyle(
                           decoration: discountPercentage > 0
                               ? TextDecoration.lineThrough

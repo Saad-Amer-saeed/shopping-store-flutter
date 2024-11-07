@@ -38,21 +38,21 @@ class LoginPage extends StatelessWidget {
 
     return Scaffold(
       backgroundColor: Colors.white,
-      appBar: AppBar(
-        backgroundColor: Colors.white,
-        leading: IconButton(
-          onPressed: () {
-            Navigator.pop(context);
-          },
-          icon: const Icon(
-            Icons.arrow_back_ios,
-            size: 20,
-            color: Colors.black,
-          ),
-        ),
-      ),
+      // appBar: AppBar(
+      //   backgroundColor: Colors.white,
+      //   leading: IconButton(
+      //     onPressed: () {
+      //       Navigator.pop(context);
+      //     },
+      //     icon: const Icon(
+      //       Icons.arrow_back_ios,
+      //       size: 20,
+      //       color: Colors.black,
+      //     ),
+      //   ),
+      // ),
       body: Container(
-        height: MediaQuery.of(context).size.height,
+        margin: const EdgeInsets.only(top: 50),
         width: double.infinity,
         child: Column(
           children: [

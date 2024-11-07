@@ -1,35 +1,57 @@
 import 'dart:ui';
-
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
 import 'package:item_count_number_button/item_count_number_button.dart';
 
 // Basket Screen Widget
-class BasketScreen extends StatelessWidget {
+// Basket Screen Widget
+class BasketScreen extends StatefulWidget {
+  const BasketScreen({super.key});
+
+  @override
+  State<BasketScreen> createState() {
+    return _BasketScreenState();
+  }
+}
+
+class _BasketScreenState extends State<BasketScreen> {
+  // State variable for the item count
+  int _itemCount = 0;
+
+  void _onItemCountChanged(num value) {
+    setState(() {
+      _itemCount = value.toInt(); // Update the item count when it changes
+    });
+    print('Selected value: $_itemCount');
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
         leading: IconButton(
-          icon: Icon(Icons.arrow_back), // The back button icon
+          icon: const Icon(Icons.arrow_back), // The back button icon
           onPressed: () {
             Navigator.pop(context); // Pops the current screen off the stack
           },
         ),
         actions: [
           IconButton(
-            icon: Icon(Icons.shopping_cart), // Change icon as needed
+            icon: const Icon(Icons.shopping_cart), // Change icon as needed
             onPressed: () {
               // Action to be performed when the icon is pressed
               print("Cart icon pressed");
             },
           ),
         ],
-        title: Text('Basket Screen'),
+        title: const Text(
+          'Basket Screen',
+          style: TextStyle(fontSize: 17),
+        ),
+        backgroundColor: Colors.white,
         centerTitle: true, // Centers the title in the AppBar
       ),
       body: Container(
-        margin: EdgeInsets.symmetric(horizontal: 12, vertical: 12),
+        margin: const EdgeInsets.symmetric(horizontal: 12, vertical: 12),
         child: Card(
           color: Colors.white,
           child: Padding(
@@ -63,37 +85,34 @@ class BasketScreen extends StatelessWidget {
                     ),
                   ),
                 ),
-                SizedBox(
+                const SizedBox(
                   width: 20,
                 ),
-                Text(
+                const Text(
                   'Double Whooper',
                   style: TextStyle(fontSize: 14, fontWeight: FontWeight.bold),
                 ),
-                SizedBox(
+                const SizedBox(
                   width: 40,
                 ),
                 Column(
                   mainAxisAlignment: MainAxisAlignment.start,
                   mainAxisSize: MainAxisSize.min,
                   children: [
-                    Text(
+                    const Text(
                       '29,500 IQD',
                       style: TextStyle(fontSize: 14, color: Colors.green),
                     ),
-                    SizedBox(
+                    const SizedBox(
                       height: 20,
                     ),
                     ItemCount(
-                      color: Color.fromARGB(255, 222, 49, 99),
-                      initialValue: 0,
+                      color: const Color.fromARGB(255, 222, 49, 99),
+                      initialValue: _itemCount,
                       minValue: 0,
                       maxValue: 10,
                       decimalPlaces: 0,
-                      onChanged: (value) {
-                        // Handle counter value changes
-                        print('Selected value: $value');
-                      },
+                      onChanged: _onItemCountChanged, // Update the item count
                     ),
                   ],
                 )
