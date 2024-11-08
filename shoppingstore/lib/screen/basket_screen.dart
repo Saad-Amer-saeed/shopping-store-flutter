@@ -109,7 +109,7 @@ class _BasketScreenState extends ConsumerState<BasketScreen> {
                     children: [
                       SizedBox(width: 12),
                       Text(
-                        'Total Qunitity', // Display totalQuantity dynamically
+                        'Total Price', // Display totalQuantity dynamically
                         style: TextStyle(
                             color: Colors.white), // Set text color to white
                       ),
