@@ -4,6 +4,7 @@ import 'package:shoppingstore/widget/card_basket.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart'; // Ensure you're importing Riverpod
 import 'package:shoppingstore/provider/basket_provider.dart';
 import 'package:shoppingstore/model/stroe_basket.dart';
+import 'package:intl/intl.dart';
 
 // Basket Screen Widget
 class BasketScreen extends ConsumerStatefulWidget {
@@ -67,18 +68,64 @@ class _BasketScreenState extends ConsumerState<BasketScreen> {
         backgroundColor: Colors.white,
         centerTitle: true, // Centers the title in the AppBar
       ),
-      body: Container(
-        margin: const EdgeInsets.symmetric(horizontal: 12, vertical: 12),
-        child: ListView.builder(
-          itemCount:
-              basketList.length, // Dynamically setting the number of items
-          itemBuilder: (context, index) {
-            return CardBasket(
-                basketitem: basketList[index],
-                onAddToBasket: addToBasket,
-                removeOrUpdateItem: removeorUpdateItem);
-          },
-        ),
+      body: Column(
+        children: [
+          Container(
+            margin: const EdgeInsets.symmetric(horizontal: 12, vertical: 12),
+            child: ListView.builder(
+              shrinkWrap: true,
+              itemCount:
+                  basketList.length, // Dynamically setting the number of items
+              itemBuilder: (context, index) {
+                return CardBasket(
+                    basketitem: basketList[index],
+                    onAddToBasket: addToBasket,
+                    removeOrUpdateItem: removeorUpdateItem);
+              },
+            ),
+          ),
+          Spacer(),
+          InkWell(
+            child: Container(
+              decoration: const BoxDecoration(
+                border: Border(
+                  top: BorderSide(
+                    color: Color.fromARGB(255, 219, 211, 211), // Border color
+                    width: 0.7, // Border width
+                  ),
+                ),
+              ),
+              child: Padding(
+                padding: EdgeInsets.all(12.0), // Outer padding as needed
+                child: Container(
+                  padding:
+                      EdgeInsets.all(8.0), // Inner padding for the orange box
+                  decoration: BoxDecoration(
+                    color: Color(0xFFDE3163), // Orange background color
+                    borderRadius: BorderRadius.circular(
+                        3.0), // Border radius for the orange container
+                  ),
+                  child: Row(
+                    children: [
+                      SizedBox(width: 12),
+                      Text(
+                        'Total Qunitity', // Display totalQuantity dynamically
+                        style: TextStyle(
+                            color: Colors.white), // Set text color to white
+                      ),
+                      Spacer(),
+                      Text(
+                        "${NumberFormat('#,##0').format(totalPrice)} IQD ",
+                        style: TextStyle(
+                            color: Colors.white), // Set text color to white
+                      ),
+                    ],
+                  ),
+                ),
+              ),
+            ),
+          )
+        ],
       ),
     );
   }
