@@ -3,6 +3,7 @@ import 'package:shoppingstore/widget/card_resturant_info.dart';
 import 'package:shoppingstore/widget/card_item_info.dart';
 import 'package:shoppingstore/model/store_products.dart';
 import 'package:shoppingstore/data/json_converter.dart';
+import 'package:shoppingstore/widget/view_card.dart';
 
 class StoreItemScreen extends StatefulWidget {
   final int storeId;
@@ -40,6 +41,8 @@ class _StoreItemScreen extends State<StoreItemScreen> {
 
   @override
   Widget build(BuildContext context) {
+    //   final basketList = ref.watch(basketProvider);
+    //  final totalPrice = ref.watch(basketProvider.notifier).totalPrice;
     return Scaffold(
       body: Column(
         children: [
@@ -117,6 +120,7 @@ class _StoreItemScreen extends State<StoreItemScreen> {
                   }
                 }),
           ),
+          ViewCard(),
         ],
       ),
     );
