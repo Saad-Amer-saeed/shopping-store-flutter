@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:item_count_number_button/item_count_number_button.dart';
 import 'package:shoppingstore/model/stroe_basket.dart';
+import 'package:intl/intl.dart';
 
 class CardBasket extends StatefulWidget {
   const CardBasket(
@@ -88,7 +89,7 @@ class _CardBasketState extends State<CardBasket> {
             Column(
               children: [
                 Text(
-                  widget.basketitem.productsTotalprice.toString(),
+                  "${NumberFormat('#,##0').format(widget.basketitem.productsTotalprice)} IQD ",
                   style: const TextStyle(fontSize: 14, color: Colors.green),
                 ),
                 const SizedBox(height: 20),

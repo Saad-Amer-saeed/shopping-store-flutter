@@ -22,7 +22,9 @@ class _CardItemInfoState extends ConsumerState<CardItemInfo> {
       productId: widget.chosenstore.productId,
       productName: widget.chosenstore.productName,
       productImage: widget.chosenstore.productImage,
-      productPrice: widget.chosenstore.productPrice,
+      productPrice: (widget.chosenstore.productPrice *
+              (1 - widget.discountPercentage / 100))
+          .toInt(),
     );
 
     // Add or update the item in the basket using the notifier
