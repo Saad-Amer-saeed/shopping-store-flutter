@@ -38,6 +38,7 @@ dependencies:
   item_count_number_button: ^1.9.2
   intl: ^0.19.0
   flutter_riverpod: ^2.6.1
+  expand_tap_area: ^1.1.1
 
 dev_dependencies:
   flutter_test:

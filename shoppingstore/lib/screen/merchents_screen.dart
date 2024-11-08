@@ -136,8 +136,13 @@ class _MerchentsScreenState extends State<MerchentsScreen> {
       Navigator.push(
         context,
         MaterialPageRoute(
-          builder: (context) => StoreItemScreen(storeId, storeBackgroundImage,
-              storeName, storeLogo, storeRate, discountPercentage),
+          builder: (context) => StoreItemScreen(
+              storeId: storeId,
+              storeBackgroundImage: storeBackgroundImage,
+              storeName: storeName,
+              storeLogo: storeLogo,
+              storeRate: storeRate,
+              discountPercentage: discountPercentage),
         ),
       );
     }

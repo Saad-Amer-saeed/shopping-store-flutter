@@ -91,29 +91,35 @@ class _CardItemInfoState extends ConsumerState<CardItemInfo> {
               clipBehavior: Clip.none,
               children: [
                 // Image with border
-                Container(
-                  decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(8.0),
-                    border: Border.all(
-                      color: Colors.grey, // Border color
-                      width: 0.6, // Border width
+                GestureDetector(
+                  onTap: () {
+                    // Handle image tap or add to basket logic
+                    print("Image tapped");
+                  },
+                  child: Container(
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(8.0),
+                      border: Border.all(
+                        color: Colors.grey, // Border color
+                        width: 0.6, // Border width
+                      ),
                     ),
-                  ),
-                  child: ClipRRect(
-                    borderRadius: BorderRadius.circular(8.0),
-                    child: Image.network(
-                      widget.chosenstore.productImage,
-                      width: 100, // Adjust width as needed
-                      height: 100, // Adjust height as needed
-                      fit: BoxFit.cover,
-                      errorBuilder: (context, error, stackTrace) {
-                        return Image.network(
-                          "https://d2yugwrr6or5n1.cloudfront.net/merchant_images/1623662674947WhatsApp%20Image%202021-06-14%20at%2011.webp",
-                          width: 100,
-                          height: 100,
-                          fit: BoxFit.cover,
-                        );
-                      },
+                    child: ClipRRect(
+                      borderRadius: BorderRadius.circular(8.0),
+                      child: Image.network(
+                        widget.chosenstore.productImage,
+                        width: 100, // Adjust width as needed
+                        height: 100, // Adjust height as needed
+                        fit: BoxFit.cover,
+                        errorBuilder: (context, error, stackTrace) {
+                          return Image.network(
+                            "https://d2yugwrr6or5n1.cloudfront.net/merchant_images/1623662674947WhatsApp%20Image%202021-06-14%20at%2011.webp",
+                            width: 100,
+                            height: 100,
+                            fit: BoxFit.cover,
+                          );
+                        },
+                      ),
                     ),
                   ),
                 ),
@@ -138,15 +144,17 @@ class _CardItemInfoState extends ConsumerState<CardItemInfo> {
                       ),
                     ),
                   ),
+                // Button or Icon on top of image
                 if (widget.chosenstore.productStock > 0)
                   Positioned(
-                    right: 77,
-                    top: 74,
-                    child: IconButton(
-                      onPressed: _addToBasket,
-                      icon: const Icon(
-                        Icons.add_circle,
-                        color: Color(0xFFDE3163),
+                    right: 78, // Distance from the right
+                    top: 80, // Distance from the top
+                    child: InkWell(
+                      onTap: _addToBasket,
+                      child: Icon(
+                        Icons.add_circle_outlined, // Icon to be displayed
+                        color: Color(0xFFDE3163), // Color of the icon
+                        size: 30, // Icon size
                       ),
                     ),
                   ),

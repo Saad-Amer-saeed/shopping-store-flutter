@@ -1,14 +1,22 @@
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 
 class ViewCard extends StatelessWidget {
-  const ViewCard({super.key});
+  final int totalQuantity; // Declare totalQuantity
+  final double totalPrice; // Declare totalPrice
+  final VoidCallback basketpage;
+
+  const ViewCard(
+      {super.key,
+      required this.totalQuantity, // Pass totalQuantity to the constructor
+      required this.totalPrice,
+      required this.basketpage // Pass totalPrice to the constructor
+      });
 
   @override
   Widget build(BuildContext context) {
     return InkWell(
-      onTap: () {
-        // Define the action to be performed on tap here.
-      },
+      onTap: basketpage,
       child: Container(
         decoration: const BoxDecoration(
           border: Border(
@@ -27,13 +35,11 @@ class ViewCard extends StatelessWidget {
               borderRadius: BorderRadius.circular(
                   3.0), // Border radius for the orange container
             ),
-            child: const Row(
+            child: Row(
               children: [
-                SizedBox(
-                  width: 12,
-                ),
+                SizedBox(width: 12),
                 Text(
-                  '4',
+                  '$totalQuantity', // Display totalQuantity dynamically
                   style:
                       TextStyle(color: Colors.white), // Set text color to white
                 ),
@@ -45,7 +51,8 @@ class ViewCard extends StatelessWidget {
                 ),
                 Spacer(),
                 Text(
-                  'IQD 6000',
+                  "${NumberFormat('#,##0').format(totalPrice)} IQD ",
+                  // Display totalPrice dynamically
                   style:
                       TextStyle(color: Colors.white), // Set text color to white
                 ),

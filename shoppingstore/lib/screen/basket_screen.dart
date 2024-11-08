@@ -7,7 +7,9 @@ import 'package:shoppingstore/model/stroe_basket.dart';
 
 // Basket Screen Widget
 class BasketScreen extends ConsumerStatefulWidget {
-  const BasketScreen({super.key});
+  const BasketScreen(this.showbackbutton, {super.key});
+
+  final bool showbackbutton;
 
   @override
   ConsumerState<BasketScreen> createState() {
@@ -40,7 +42,7 @@ class _BasketScreenState extends ConsumerState<BasketScreen> {
 
     return Scaffold(
       appBar: AppBar(
-        leading: test
+        leading: widget.showbackbutton
             ? IconButton(
                 icon: const Icon(Icons.arrow_back), // The back button icon
                 onPressed: () {

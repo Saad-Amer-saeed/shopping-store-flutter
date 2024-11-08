@@ -45,7 +45,7 @@ class CardResturantInfo extends StatelessWidget {
                   borderRadius:
                       BorderRadius.circular(8.0), // Adjust the radius as needed
                   child: Image.network(
-                    storeName,
+                    storeLogo,
                     width: 80, // Adjust width as needed
                     height: 70, // Adjust height as needed
                     fit: BoxFit.cover,
@@ -58,7 +58,7 @@ class CardResturantInfo extends StatelessWidget {
               Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Text(storeLogo),
+                  Text(storeName),
                   const SizedBox(
                     height: 20,
                   ),

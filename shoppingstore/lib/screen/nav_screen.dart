@@ -20,13 +20,20 @@ class _TabNavigationScreenState extends State<TabNavigationScreen> {
   double horizontalMargin = 0; // Horizontal margin
   double borderRadiusValue = 1; // Border radius for bottom navigation bar
   double borderWidth = 2.0; // Border width for the bottom navigation bar
-
+  bool showbackbutton = false;
   // List of pages to show for each tab
-  final List<Widget> _pages = <Widget>[
-    const MerchentsScreen(),
-    BasketScreen(),
-    LoginPage(),
-  ];
+  late final List<Widget> _pages;
+
+  @override
+  void initState() {
+    super.initState();
+    // Initialize _pages after state initialization
+    _pages = <Widget>[
+      const MerchentsScreen(),
+      BasketScreen(showbackbutton), // Pass the value directly here
+      const LoginPage(),
+    ];
+  }
 
   // Change the selected index
   void _onItemTapped(int index) {
@@ -90,6 +97,3 @@ class _TabNavigationScreenState extends State<TabNavigationScreen> {
     );
   }
 }
-
-
-// Home Screen Widget

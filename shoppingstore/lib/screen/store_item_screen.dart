@@ -1,38 +1,53 @@
 import 'package:flutter/material.dart';
+import 'package:shoppingstore/screen/basket_screen.dart';
 import 'package:shoppingstore/widget/card_resturant_info.dart';
 import 'package:shoppingstore/widget/card_item_info.dart';
 import 'package:shoppingstore/model/store_products.dart';
 import 'package:shoppingstore/data/json_converter.dart';
 import 'package:shoppingstore/widget/view_card.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:shoppingstore/provider/basket_provider.dart';
 
-class StoreItemScreen extends StatefulWidget {
+class StoreItemScreen extends ConsumerStatefulWidget {
   final int storeId;
   final String storeBackgroundImage;
   final String storeName;
   final String storeLogo;
   final double storeRate;
   final int discountPercentage;
-  const StoreItemScreen(this.storeId, this.storeBackgroundImage, this.storeLogo,
-      this.storeName, this.storeRate, this.discountPercentage,
-      {super.key});
+  const StoreItemScreen(
+      {super.key,
+      required this.storeId,
+      required this.storeBackgroundImage,
+      required this.storeLogo,
+      required this.storeName,
+      required this.storeRate,
+      required this.discountPercentage});
 
   @override
-  State<StoreItemScreen> createState() {
-    return _StoreItemScreen();
-  }
+  ConsumerState<StoreItemScreen> createState() => _StoreItemScreenState();
 }
 
-class _StoreItemScreen extends State<StoreItemScreen> {
-  List<Product> chosenstore = [];
-  late Future<List<Product>> product;
+class _StoreItemScreenState extends ConsumerState<StoreItemScreen> {
+  List<Product> chosenStore = [];
+  bool showbackbutton = true;
+  void basketpage() {
+    // Navigate to the store page if the store is open
+    Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (context) => BasketScreen(showbackbutton),
+      ),
+    );
+  }
 
   @override
   void initState() {
     super.initState();
-    product = loadProducts();
-    product.then((allStoreItems) {
+    // Call the loadProducts method directly, avoiding FutureBuilder
+    loadProducts().then((allStoreItems) {
       setState(() {
-        chosenstore = allStoreItems
+        chosenStore = allStoreItems
             .where((item) => item.storeId == widget.storeId)
             .toList();
       });
@@ -41,8 +56,10 @@ class _StoreItemScreen extends State<StoreItemScreen> {
 
   @override
   Widget build(BuildContext context) {
-    //   final basketList = ref.watch(basketProvider);
-    //  final totalPrice = ref.watch(basketProvider.notifier).totalPrice;
+    // Watch the basket provider for changes in the basket state
+    final totalPrice = ref.watch(basketProvider.notifier).totalPrice;
+    final totalQuantity = ref.watch(basketProvider.notifier).totalQuantity;
+    final basketList = ref.watch(basketProvider);
     return Scaffold(
       body: Column(
         children: [
@@ -63,7 +80,6 @@ class _StoreItemScreen extends State<StoreItemScreen> {
                   );
                 },
               ),
-
               // Card overlay
               CardResturantInfo(
                 storeName: widget.storeName,
@@ -75,9 +91,11 @@ class _StoreItemScreen extends State<StoreItemScreen> {
                 top: 20, // Adjust the position as needed
                 left: 7, // Adjust the position as needed
                 child: IconButton(
-                  icon:
-                      const Icon(Icons.arrow_circle_left, color: Colors.black),
-                  iconSize: 27, // You can change the color
+                  icon: const Icon(
+                    Icons.arrow_back_ios_new_sharp,
+                    color: Colors.black,
+                  ),
+                  iconSize: 33, // You can change the color
                   onPressed: () {
                     Navigator.of(context)
                         .pop(); // Go back to the previous screen
@@ -91,36 +109,27 @@ class _StoreItemScreen extends State<StoreItemScreen> {
             height: 45,
           ),
           Expanded(
-            child: FutureBuilder<List<Product>>(
-                future: product,
-                builder: (context, snapshot) {
-                  if (snapshot.connectionState == ConnectionState.waiting) {
-                    return const Center(
-                        child:
-                            CircularProgressIndicator()); // Loading indicator
-                  } else if (snapshot.hasError) {
-                    return Center(
-                        child:
-                            Text('Error: ${snapshot.error}')); // Error message
-                  } else if (chosenstore.isEmpty) {
-                    return const Center(
-                        child: Text('No items available for this store.'));
-                  } else {
-                    return ListView.builder(
-                      itemCount: chosenstore.length,
-                      itemBuilder: (context, index) {
-                        return Padding(
-                          padding: const EdgeInsets.only(bottom: 9),
-                          child: CardItemInfo(
-                              chosenstore: chosenstore[index],
-                              discountPercentage: widget.discountPercentage),
-                        );
-                      },
-                    );
-                  }
-                }),
+            child: chosenStore.isEmpty
+                ? const Center(
+                    child: Text('No items available for this store.'))
+                : ListView.builder(
+                    itemCount: chosenStore.length,
+                    itemBuilder: (context, index) {
+                      return Padding(
+                        padding: const EdgeInsets.only(bottom: 9),
+                        child: CardItemInfo(
+                            chosenstore: chosenStore[index],
+                            discountPercentage: widget.discountPercentage),
+                      );
+                    },
+                  ),
           ),
-          ViewCard(),
+          if (basketList.isNotEmpty)
+            ViewCard(
+              totalQuantity: totalQuantity,
+              totalPrice: totalPrice,
+              basketpage: basketpage,
+            ),
         ],
       ),
     );

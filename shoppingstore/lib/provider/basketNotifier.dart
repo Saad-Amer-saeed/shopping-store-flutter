@@ -5,6 +5,7 @@ class BasketNotifier extends StateNotifier<List<Basket>> {
   BasketNotifier() : super([]); // Initialize the basket with an empty list
 
   double totalPrice = 0.0; // Store the total price of all items in the basket
+  int totalQuantity = 0; // Store the total quantity of all items in the basket
 
   void removeOrUpdateItem(int productId) {
     // Find the index of the item in the basket
@@ -35,7 +36,7 @@ class BasketNotifier extends StateNotifier<List<Basket>> {
         ];
       }
 
-      _updateTotalPrice(); // Update the total price after the change
+      _updateTotals(); // Update the total price and quantity after the change
     }
   }
 
@@ -45,10 +46,10 @@ class BasketNotifier extends StateNotifier<List<Basket>> {
         state.indexWhere((item) => item.productId == basket.productId);
 
     if (existingItemIndex != -1) {
-      // If the item exists, increase the quantity and update total price
+      // If the item exists, increase the quantity and update totals
       _updateQuantity(existingItemIndex);
     } else {
-      // If the item does not exist, add it to the basket and update total price
+      // If the item does not exist, add it to the basket and update totals
       _addToBasket(basket);
     }
   }
@@ -56,7 +57,7 @@ class BasketNotifier extends StateNotifier<List<Basket>> {
   // Method to add a new item to the basket
   void _addToBasket(Basket basket) {
     state = [...state, basket];
-    _updateTotalPrice(); // Update total price after adding a new item
+    _updateTotals(); // Update total price and quantity after adding a new item
   }
 
   // Method to update the quantity of an existing item
@@ -64,29 +65,26 @@ class BasketNotifier extends StateNotifier<List<Basket>> {
     // Get the current item
     final currentItem = state[index];
 
-    // Calculate the new total price based on the updated quantity
-    final updatedTotalPrice =
-        currentItem.productPrice! + currentItem.productsTotalprice!;
-
-    // Update the state with the new quantity and price
+    // Update the state with the new quantity
     state = [
       ...state.sublist(0, index),
       Basket(
         productId: currentItem.productId,
         productName: currentItem.productName,
         productImage: currentItem.productImage,
-        productPrice: currentItem.productPrice, // Updated total price
-        // productsTotalprice: updatedTotalPrice,
+        productPrice: currentItem.productPrice, // Price remains the same
         productQuantity: currentItem.productQuantity + 1, // Increase quantity
       ),
       ...state.sublist(index + 1),
     ];
 
-    _updateTotalPrice(); // Update total price after changing quantity
+    _updateTotals(); // Update total price and quantity after changing quantity
   }
 
-  // Method to update the total price of the basket
-  void _updateTotalPrice() {
-    totalPrice = state.fold(0.0, (sum, item) => sum + item.productPrice!);
+  // Method to update the total price and total quantity of the basket
+  void _updateTotals() {
+    totalPrice = state.fold(
+        0.0, (sum, item) => sum + (item.productPrice! * item.productQuantity));
+    totalQuantity = state.fold(0, (sum, item) => sum + item.productQuantity);
   }
 }
