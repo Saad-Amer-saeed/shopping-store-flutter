@@ -1,11 +1,52 @@
+import 'dart:convert';
+import 'dart:io';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:path_provider/path_provider.dart';
 import 'package:shoppingstore/model/stroe_basket.dart';
 
 class BasketNotifier extends StateNotifier<List<Basket>> {
-  BasketNotifier() : super([]); // Initialize the basket with an empty list
+  BasketNotifier() : super([]) {
+    _loadBasket(); // Load basket data from the local file when the notifier is initialized
+  }
 
   double totalPrice = 0.0; // Store the total price of all items in the basket
   int totalQuantity = 0; // Store the total quantity of all items in the basket
+
+  // Method to load the basket from a local file
+  Future<void> _loadBasket() async {
+    try {
+      final directory = await getApplicationDocumentsDirectory();
+      final file = File('${directory.path}/basket.json');
+
+      if (await file.exists()) {
+        final jsonString = await file.readAsString();
+        final List<dynamic> jsonList = json.decode(jsonString);
+
+        // Convert the JSON list to Basket objects
+        state = jsonList.map((item) => Basket.fromJson(item)).toList();
+        _updateTotals(); // Update totals after loading the basket
+      }
+    } catch (e) {
+      print('Error loading basket: $e');
+    }
+  }
+
+  // Method to save the basket to a local file
+  Future<void> _saveBasket() async {
+    try {
+      final directory = await getApplicationDocumentsDirectory();
+      final file = File('${directory.path}/basket.json');
+
+      // Convert the basket list to JSON
+      final jsonList = state.map((item) => item.toJson()).toList();
+      final jsonString = json.encode(jsonList);
+
+      // Write the JSON string to the file
+      await file.writeAsString(jsonString);
+    } catch (e) {
+      print('Error saving basket: $e');
+    }
+  }
 
   void removeOrUpdateItem(int productId) {
     // Find the index of the item in the basket
@@ -37,6 +78,7 @@ class BasketNotifier extends StateNotifier<List<Basket>> {
       }
 
       _updateTotals(); // Update the total price and quantity after the change
+      _saveBasket(); // Save the updated basket to the file
     }
   }
 
@@ -52,6 +94,8 @@ class BasketNotifier extends StateNotifier<List<Basket>> {
       // If the item does not exist, add it to the basket and update totals
       _addToBasket(basket);
     }
+
+    _saveBasket(); // Save the updated basket to the file
   }
 
   // Method to add a new item to the basket
